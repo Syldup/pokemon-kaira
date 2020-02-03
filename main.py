@@ -5,6 +5,8 @@
 import pygame
 import sys
 
+from pokemon import Pokemon
+
 pygame.init()
 clock = pygame.time.Clock()
 
@@ -128,6 +130,7 @@ class Game:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     self.reset_button.update_button(self.fond, action=reset)
                     self.start_button.update_button(self.fond, action=start)
+                    self.start_button.update_button(self.fond, action=pokemon)
                     self.quit_button.update_button(self.fond, action=gamequit)
                     self.moins_button.update_button(self.fond, action=self.moins)
                     self.plus_button.update_button(self.fond, action=self.plus)
@@ -151,6 +154,11 @@ def reset():
 
 def start():
     print("start")
+
+def pokemon():
+    d = Pokemon()
+    d.create_pok()
+    print(d)
 
 
 def gamequit():
