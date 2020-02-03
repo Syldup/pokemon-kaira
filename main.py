@@ -74,6 +74,8 @@ class Game:
         self.big = pygame.font.SysFont('freesans', 48)
         self.small = pygame.font.SysFont('freesans', 36)
 
+        self.bg_combat = pygame.image.load("background.jpg").convert()
+
         self.create_fond()
         self.create_button()
 
