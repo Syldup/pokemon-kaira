@@ -4,7 +4,7 @@ import json
 
 
 def read_write(url, path):
-    path = "resources/" + path
+    path = "resources/pokemons/" + path
     print(os.path.isfile(path), end=' ')
     if os.path.isfile(path):
         with open(path) as json_file:
