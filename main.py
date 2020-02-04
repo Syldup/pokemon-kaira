@@ -4,6 +4,7 @@
 
 import pygame
 import sys
+from utils import *
 
 from pokemon import Pokemon
 
@@ -69,28 +70,33 @@ class Button:
 class Game:
     def __init__(self):
         self.screen = pygame.display.set_mode((640, 480))
-        self.level = 1
         self.loop = True
+        self.level = 1
+
+        self.bg_menu = scale(loadImg("bg/menu2.jpg"), 0.7)
+        self.logo_pokemon = scale(loadImg("logo/pokemon.png"), 0.3)
+        self.logo_kaira = scale(loadImg("logo/kaira_bord.png"), 0.2)
 
         # Définition de la police
         self.big = pygame.font.SysFont('freesans', 48)
         self.small = pygame.font.SysFont('freesans', 36)
 
-        self.bg_combat = pygame.image.load("background.jpg").convert()
-
-        self.create_fond()
+        # Image de la taille de la fenêtre
+        self.fond = pygame.Surface(self.screen.get_size())
+        self.draw_bg()
         self.create_button()
 
     def update_textes(self):
-        self.textes = [["Buggy Server", ORANGE, self.big, 0, 50],
-                       ["Level", BLACK, self.small, 0, 150],
+        self.textes = [["Level", BLACK, self.small, 0, 150],
                        [str(self.level), BLACK, self.small, 0, 200]]
 
-    def create_fond(self):
-        # Image de la taille de la fenêtre
-        self.fond = pygame.Surface(self.screen.get_size())
-        # En bleu
-        self.fond.fill(CIEL)
+    def draw_bg(self):
+        centre = xAll(self.fond.get_rect().size, 0.5)
+        drawOn(self.fond, self.bg_menu, centre, center=True)
+        drawOn(self.fond, self.logo_pokemon, (centre[0], 90), center=True)
+
+        logo_kaira = pygame.transform.rotate(self.logo_kaira, 20)
+        drawOn(self.fond, logo_kaira, (centre[0]+30, 20))
 
     def create_button(self):
         self.reset_button = Button(self.fond, "   Reset   ", RED, self.small, 0, 300)
@@ -110,15 +116,17 @@ class Game:
 
     def plus(self):
         self.level += 1
-        if self.level == 6: self.level = 5
+        if self.level == 6:
+            self.level = 5
 
     def moins(self):
         self.level += -1
-        if self.level == 0: self.level = 1
+        if self.level == 0:
+            self.level = 1
 
     def infinite_loop(self):
         while self.loop:
-            self.create_fond()
+            self.draw_bg()
 
             # Boutons
             self.reset_button.display_button(self.fond)
@@ -127,10 +135,11 @@ class Game:
             self.moins_button.display_button(self.fond)
             self.plus_button.display_button(self.fond)
             for event in pygame.event.get():
-                if event.type == pygame.MOUSEBUTTONDOWN:
+                if event.type == pygame.QUIT:
+                    gamequit()
+                elif event.type == pygame.MOUSEBUTTONDOWN:
                     self.reset_button.update_button(self.fond, action=reset)
                     self.start_button.update_button(self.fond, action=start)
-                    self.start_button.update_button(self.fond, action=pokemon)
                     self.quit_button.update_button(self.fond, action=gamequit)
                     self.moins_button.update_button(self.fond, action=self.moins)
                     self.plus_button.update_button(self.fond, action=self.plus)
@@ -154,11 +163,6 @@ def reset():
 
 def start():
     print("start")
-
-def pokemon():
-    d = Pokemon()
-    d.create_pok()
-    print(d)
 
 
 def gamequit():
