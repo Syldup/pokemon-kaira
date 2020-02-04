@@ -19,7 +19,7 @@ def read_write(url, path):
 fieldes = ["name", "abilities", "base_experience", "forms", "height", "held_items",
            "id", "is_default", "order", "species", "stats", "types", "weight"]
 
-list_pok = read_write('https://pokeapi.co/api/v2/pokemon/?offset=0&limit=1000', 'list_pok.json')
+list_pok = read_write('https://pokeapi.co/api/v2/pokemon/?offset=0&limit=807', 'list_pok.json')
 data = dict()
 
 for pok in list_pok['results']:
@@ -28,6 +28,5 @@ for pok in list_pok['results']:
     print(pok)
     data[pok['name']] = dict(((key, p[key]) for key in fieldes))
 
-f = open("pok_data.json", 'w')
-f.write(str(data))
-f.close()
+with open("pok_data.json", 'w') as outfile:
+    json.dump(data, outfile)

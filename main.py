@@ -144,6 +144,8 @@ class Game:
 
 def reset():
     print("reset")
+    for p in Pokemon.listPokemon:
+        print(str(p))
 
 
 def start():
@@ -157,5 +159,6 @@ def gamequit():
 
 
 if __name__ == '__main__':
+    Pokemon.initClass()
     game = Game()
     game.infinite_loop()
