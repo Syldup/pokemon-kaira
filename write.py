@@ -28,5 +28,5 @@ for pok in list_pok['results']:
     print(pok)
     data[pok['name']] = dict(((key, p[key]) for key in fieldes))
 
-with open("pok_data.json", 'w') as outfile:
+with open("assets/pok_data.json", 'w') as outfile:
     json.dump(data, outfile)

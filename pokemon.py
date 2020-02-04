@@ -20,7 +20,7 @@ class Pokemon():
 
     @classmethod
     def initClass(cls):
-        with open('pok_data.json') as json_file:
+        with open('assets/pok_data.json') as json_file:
             jsonPokemon = json.load(json_file)
             for key, value in jsonPokemon.items():
                 cls.listPokemon.append(Pokemon(value))
