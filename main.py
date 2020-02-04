@@ -20,51 +20,37 @@ GREEN = 0, 255, 0
 
 
 class Button:
-    '''Ajout d'un bouton avec un texte sur img
-    Astuce: ajouter des espaces dans les textes pour avoir une même largeur
-    de boutons
-    dx, dy décalage du bouton par rapport au centre
-    action si click
-    Texte noir
-    '''
+    sprites = list()
 
-    def __init__(self, fond, text, color, font, dx, dy):
-        self.fond = fond
+    @classmethod
+    def init_sprite(cls):
+        cls.sprites.append({False: scale(loadImg("icon/bt_black_off.png"), 0.4),
+                            True: scale(loadImg("icon/bt_black_on.png"), 0.4)})
+
+    def __init__(self, fond, text, pos):
         self.text = text
-        self.color = color
-        self.font = font
-        self.dec = dx, dy
         self.state = False  # enable or not
-        self.title = self.font.render(self.text, True, BLACK)
+        self.type = 0
+        self.title = pygame.font.SysFont('freesans', 36).render(self.text, True, BLACK)
         textpos = self.title.get_rect()
-        textpos.centerx = self.fond.get_rect().centerx + self.dec[0]
-        textpos.centery = self.dec[1]
+        textpos.centerx = pos[0]
+        textpos.centery = pos[1]
         self.textpos = [textpos[0], textpos[1], textpos[2], textpos[3]]
-        self.rect = pygame.draw.rect(self.fond, self.color, self.textpos)
-        self.fond.blit(self.title, self.textpos)
+        self.rect = pygame.draw.rect(fond, (0, 0, 0), self.textpos)
+        self.display_button(fond)
 
     def update_button(self, fond, action=None):
-        self.fond = fond
-        mouse_xy = pygame.mouse.get_pos()
-        over = self.rect.collidepoint(mouse_xy)
+        over = self.rect.collidepoint(pygame.mouse.get_pos())
         if over:
-            action()
-            if self.color == RED:
-                self.color = GREEN
-                self.state = True
-            elif self.color == GREEN:
-                # sauf les + et -, pour que ce soit toujours vert
-                if len(self.text) > 5:  # 5 char avec les espaces
-                    self.color = RED
-                self.state = False
-        # à la bonne couleur
-        self.rect = pygame.draw.rect(self.fond, self.color, self.textpos)
-        self.fond.blit(self.title, self.textpos)
+            if action is not None:
+                action()
+            self.state = not self.state
+        self.display_button(fond)
 
     def display_button(self, fond):
-        self.fond = fond
-        self.rect = pygame.draw.rect(self.fond, self.color, self.textpos)
-        self.fond.blit(self.title, self.textpos)
+        btn_on = self.state != self.rect.collidepoint(pygame.mouse.get_pos())
+        drawOn(fond, Button.sprites[self.type][btn_on], self.textpos, center=True)
+        drawOn(fond, self.title, self.textpos, center=True)
 
 
 class Game:
@@ -76,7 +62,7 @@ class Game:
         self.bg_menu = scale(loadImg("bg/menu2.jpg"), 0.7)
         self.logo_pokemon = scale(loadImg("logo/pokemon.png"), 0.3)
         self.logo_kaira = scale(loadImg("logo/kaira_bord.png"), 0.2)
-
+        Button.init_sprite()
         # Définition de la police
         self.big = pygame.font.SysFont('freesans', 48)
         self.small = pygame.font.SysFont('freesans', 36)
@@ -99,11 +85,13 @@ class Game:
         drawOn(self.fond, logo_kaira, (centre[0]+30, 20))
 
     def create_button(self):
-        self.reset_button = Button(self.fond, "   Reset   ", RED, self.small, 0, 300)
-        self.start_button = Button(self.fond, "   Start   ", RED, self.small, 0, 360)
-        self.quit_button  = Button(self.fond, "   Quit   ", RED, self.small, 0, 420)
-        self.moins_button = Button(self.fond, "  -  ", GREEN, self.small, -100, 200)
-        self.plus_button  = Button(self.fond, "  +  ", GREEN, self.small, 100, 200)
+        centerx = self.fond.get_rect().centerx
+        self.btns = [
+            (Button(self.fond, 'Pokemon', (centerx-100, 300)), self.plus),
+            (Button(self.fond, 'Reset', (centerx+100, 300)), reset),
+            (Button(self.fond, 'Start', (centerx, 360)), start),
+            (Button(self.fond, 'Quit', (centerx, 420)), gamequit),
+        ]
 
     def display_text(self, text, color, font, dx, dy):
         '''Ajout d'un texte sur fond. Décalage dx, dy par rapport au centre.
@@ -128,21 +116,18 @@ class Game:
         while self.loop:
             self.draw_bg()
 
-            # Boutons
-            self.reset_button.display_button(self.fond)
-            self.start_button.display_button(self.fond)
-            self.quit_button.display_button(self.fond)
-            self.moins_button.display_button(self.fond)
-            self.plus_button.display_button(self.fond)
+            for btn, action in self.btns:
+                btn.display_button(self.fond)
+
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     gamequit()
+                elif event.type == pygame.MOUSEMOTION:
+                    for btn, action in self.btns:
+                        btn.update_button(self.fond)
                 elif event.type == pygame.MOUSEBUTTONDOWN:
-                    self.reset_button.update_button(self.fond, action=reset)
-                    self.start_button.update_button(self.fond, action=start)
-                    self.quit_button.update_button(self.fond, action=gamequit)
-                    self.moins_button.update_button(self.fond, action=self.moins)
-                    self.plus_button.update_button(self.fond, action=self.plus)
+                    for btn, action in self.btns:
+                        btn.update_button(self.fond, action=action)
 
             self.update_textes()
             for text in self.textes:
