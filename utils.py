@@ -31,38 +31,48 @@ def scale(img, n):
     return pygame.transform.scale(img, xAll(img.get_rect().size, n))
 
 
-def drawOn(surface, img, xy=(0, 0), center=False, scal=1.0):
+def moveOrigine(rect, origine):
+    d = 1 + origine // 10
+    origine = origine % 10 - 1
+    offset = list(-int(c/2 * (offset-1)) for c, offset in zip(rect.size, [origine % 3, origine // 3]))
+    return rect.move(*xAll(offset, d))
+
+
+def drawOn(surface, img, xy=(0, 0), origine=1, scal=1.0):
     if scal != 1.0:
         img = scale(img, scal)
-    return surface.blit(img, xy if not center else list(int(p-o/2) for p, o in zip(xy, img.get_rect().size)))
+    if origine == 1:
+        return surface.blit(img, xy)
+    return surface.blit(img, moveOrigine(img.get_rect(center=xy[:2]), origine)[:2])
 
 
 class Button:
-    def __init__(self, conf, text, pos):
+    def __init__(self, conf, text, pos, origine=5):
         self.text = text
-        self.overflew = False
+        self.overflew = conf['overflew']
         self.state = False  # enable or not
 
         self.bg = conf['bg']
         self.sprite = conf['sprite'].copy()
         self.sprite['text'] = conf['font'].render(self.text, True, WHITE)
 
-        self.pos = self.sprite[self.state].get_rect()
-        self.pos.centerx, self.pos.centery = pos
+        self.pos = moveOrigine(self.sprite[self.state].get_rect(center=pos), origine)
+        if conf['text_offset'] is None:
+            pos_text = moveOrigine(self.pos, 1)
+            pos_text.size = self.sprite['text'].get_size()
+            self.pos_text = moveOrigine(pos_text, 9)
+        else:
+            self.pos_text = self.pos.move(conf['text_offset'])
 
-        self.rect = self.display_button()
-        self.overflew = conf['overflew']
+    def draw(self):
+        if self.overflew:
+            self.state = self.pos.collidepoint(pygame.mouse.get_pos())
+        drawOn(self.bg, self.sprite[self.state], self.pos)
+        drawOn(self.bg, self.sprite['text'], self.pos_text)
 
-    def update_button(self, action=None):
-        self.state = self.rect.collidepoint(pygame.mouse.get_pos())
+    def update(self, action=None):
+        self.state = self.pos.collidepoint(pygame.mouse.get_pos())
         if self.state:
             if action is not None:
                 action()
-        self.display_button()
-
-    def display_button(self):
-        if self.overflew:
-            self.state = self.rect.collidepoint(pygame.mouse.get_pos())
-        rect = drawOn(self.bg, self.sprite[self.state], self.pos, center=True)
-        drawOn(self.bg, self.sprite['text'], self.pos, center=True)
-        return rect
+        self.draw()

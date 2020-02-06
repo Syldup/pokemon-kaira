@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from pageMenu import PageMenu
+from pageCombat import PageCombat
 from utils import *
 
 from pokemon import Pokemon
@@ -19,6 +20,7 @@ class Game:
         self.page = None
         self.allPages = {
             'Menu': PageMenu(self.screen),
+            'Comb': PageCombat(self.screen),
         }
         self.page = None
 
@@ -37,7 +39,7 @@ class Game:
             self.page.update()
 
             # Ajout du fond dans la fenêtre
-            self.screen.blit(self.page.bg, (0, 0))
+            self.page.display(self.screen)
             # Actualisation de l'affichage
             pygame.display.update()
             # 10 fps
