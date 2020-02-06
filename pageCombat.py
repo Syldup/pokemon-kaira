@@ -1,13 +1,17 @@
+from Joueur import Joueur
 from utils import *
+from random import randint
+
+ACTIONS = ['attaque', 'defense', 'soin']
 
 
 class PageCombat:
+
     def __init__(self, screen):
         self.bg_rect = screen.get_rect()
         self.combat_rect = screen.get_rect()
-        self.combat_rect[3] = int(2*self.bg_rect[3]/3)
+        self.combat_rect[3] = int(2 * self.bg_rect[3] / 3)
         self.bg = pygame.Surface(self.bg_rect.size)
-        self.level = 10
 
         self.fond_combat = scale(loadImg('bg/combat1.png'), 2.51)
         self.bot_combat = pygame.transform.scale(loadImg('bg/bot_combat.jpg'), (self.bg_rect[2], self.bg_rect[3]-self.combat_rect[3]))
@@ -20,22 +24,34 @@ class PageCombat:
         self.btn_conf = {
             'bg': self.bg,
             'overflew': True,
-            'font': pygame.font.Font('assets/Pixeled.ttf', 18),
-            'text_offset': None,
+            'font': pygame.font.Font('assets/Pixeled.ttf', 16),
+            'text_offset': [0, 0],
             'sprite': {
                 True: loadImg('icon/select_on.png'),
             },
-            'box_size': True,
+            'box_size': 'text',
         }
-        self.btns = [
-            (Button(self.btn_conf, 'ATTAQUE', (self.bg_rect[2]-10, 5*self.bg_rect[3]/6-8), origine=9), self.attaque),
-            (Button(self.btn_conf, 'POKEMON', (self.bg_rect[2]-10, 5*self.bg_rect[3]/6+8), origine=3), self.equpe),
+        self.btnsMenu = [
+            (Button(self.btn_conf, 'ATTAQUE', (60, self.bg_rect[3] - 105), origine=4),
+             self.launchAction(ACTIONS[0])),
+            (Button(self.btn_conf, 'DEFENSE', (60, self.bg_rect[3] - 60), origine=4),
+             self.launchAction(ACTIONS[1])),
+            (Button(self.btn_conf, 'SOIN', (60, self.bg_rect[3] - 15), origine=4),
+             self.launchAction(ACTIONS[2])),
+            (Button(self.btn_conf, 'POKEMON', (self.bg_rect[2] - 60, self.bg_rect[3] - 50), origine=6),
+             self.equipe),
         ]
+        self.btns = self.btnsMenu
+
+        self.joueur1 = Joueur('pierre')
+        self.joueur2 = Joueur('blond')
+        self.pokemonFight1 = self.joueur1.pokemons[0]
+        self.pokemonFight2 = self.joueur2.pokemons[0]
 
     def draw(self):
         drawOn(self.bg, self.fond_combat, (self.combat_rect.centerx, self.combat_rect[3]), origine=8)
         drawOn(self.bg, self.box_left, (0, 50), origine=1)
-        self.draw_bar_pv((100, 100), 10, self.level)
+        self.draw_bar_pv((100, 100), 10, 10)
         drawOn(self.bg, self.box_right, (self.combat_rect[2], 220), origine=3)
         self.draw_bar_pv((self.combat_rect[2]-200, 270), 10, self.level)
 
@@ -61,12 +77,11 @@ class PageCombat:
     def display(self, screen):
         screen.blit(self.bg, (0, 0))
 
-    def attaque(self):
-        self.level -= 1
-        if self.level < 0:
-            self.level = 10
-        print("attaque")
+    def launchAction(self, actionJoueur1: str):
+        actionJoueur2 = self.getRandomAction()
 
-    def equpe(self):
-        print("equpe")
+    def equipe(self):
+        print("equipe")
 
+    def getRandomAction(self):
+        return ACTIONS[randint(0, 3)]
