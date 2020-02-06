@@ -1,4 +1,5 @@
 import pygame
+from pygame.rect import Rect
 
 
 BLACK = 0, 0, 0
@@ -38,12 +39,12 @@ def moveOrigine(rect, origine):
     return rect.move(*xAll(offset, d))
 
 
-def drawOn(surface, img, xy=(0, 0), origine=1, scal=1.0):
+def drawOn(surface, img, xy=(0, 0), origine=1, scal=1.0, *args, **kwargs):
     if scal != 1.0:
         img = scale(img, scal)
     if origine == 1:
-        return surface.blit(img, xy)
-    return surface.blit(img, moveOrigine(img.get_rect(center=xy[:2]), origine)[:2])
+        return surface.blit(img, xy, *args, **kwargs)
+    return surface.blit(img, moveOrigine(img.get_rect(center=xy[:2]), origine)[:2], *args, **kwargs)
 
 
 class Button:

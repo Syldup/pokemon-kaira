@@ -3,6 +3,7 @@
 
 from pageMenu import PageMenu
 from pageCombat import PageCombat
+from pageEquipe import PageEquipe
 from utils import *
 
 from pokemon import Pokemon
@@ -21,13 +22,14 @@ class Game:
         self.allPages = {
             'Menu': PageMenu(self.screen),
             'Comb': PageCombat(self.screen),
+            'Equi': PageEquipe(self.screen),
         }
         self.page = None
 
     def infinite_loop(self):
         while self.loop:
             if self.page is None:
-                self.page = self.allPages['Comb']
+                self.page = self.allPages['Equi']
             self.page.draw()
 
             for event in pygame.event.get():
