@@ -45,15 +45,15 @@ class PageCombat:
 
         self.joueur1 = Joueur('pierre')
         self.joueur2 = Joueur('blond')
-        self.pokemonFight1 = self.joueur1.pokemons[0]
-        self.pokemonFight2 = self.joueur2.pokemons[0]
+        self.pokemonFight1 = None  # self.joueur1.pokemons[0]
+        self.pokemonFight2 = None  # self.joueur2.pokemons[0]
 
     def draw(self):
         drawOn(self.bg, self.fond_combat, (self.combat_rect.centerx, self.combat_rect[3]), origine=8)
         drawOn(self.bg, self.box_left, (0, 50), origine=1)
         self.draw_bar_pv((100, 100), 10, 10)
         drawOn(self.bg, self.box_right, (self.combat_rect[2], 220), origine=3)
-        self.draw_bar_pv((self.combat_rect[2]-200, 270), 10, self.level)
+        self.draw_bar_pv((self.combat_rect[2]-200, 270), 10, 10)
 
         drawOn(self.bg, self.bot_combat, (self.combat_rect.centerx, self.combat_rect[3]), origine=2)
         for btn, action in self.btns:
@@ -84,4 +84,4 @@ class PageCombat:
         print("equipe")
 
     def getRandomAction(self):
-        return ACTIONS[randint(0, 3)]
+        return ACTIONS[randint(0, 2)]

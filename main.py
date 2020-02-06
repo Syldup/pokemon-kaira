@@ -29,7 +29,7 @@ class Game:
     def infinite_loop(self):
         while self.loop:
             if self.page is None:
-                self.page = self.allPages['Equi']
+                self.page = self.allPages['Comb']
             self.page.draw()
 
             for event in pygame.event.get():

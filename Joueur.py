@@ -1,7 +1,7 @@
 import string
 from typing import List
 
-import TeamPoke
+from TeamPoke import TeamPoke
 
 
 class Joueur:
