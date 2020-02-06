@@ -14,7 +14,7 @@ class Move:
 
     @classmethod
     def initClass(cls):
-        with open('assets/mov_data.json') as json_file:
+        with open('../assets/mov_data.json') as json_file:
             jsonMove = json.load(json_file)
             for key, value in jsonMove.items():
                 cls.listMove.append(Move(value))

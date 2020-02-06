@@ -16,7 +16,7 @@ class PagePokedex:
             'bg': self.bg,
             'overflew': True,
             'origine': 9,
-            'font': pygame.font.Font('assets/Pixeled.ttf', 18),
+            'font': pygame.font.Font('../assets/Pixeled.ttf', 18),
             'text_offset': None,
             'sprite': {
                 True: scale(loadImg('icon/bt_black_on.png'), 0.4),

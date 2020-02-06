@@ -1,4 +1,4 @@
-from Joueur import Joueur
+from models.joueur import Joueur
 from utils import *
 from random import randint
 
@@ -44,8 +44,8 @@ class PageCombat:
         ]
         self.btns = self.btnsMenu
 
-        self.joueur1 = Joueur('pierre')
-        self.joueur2 = Joueur('blond')
+        self.joueur1 = Joueur('Pierre')
+        self.joueur2 = Joueur('Blond')
         self.pokemonFight1 = None  # self.joueur1.pokemons[0]
         self.pokemonFight2 = None  # self.joueur2.pokemons[0]
 

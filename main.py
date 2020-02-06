@@ -1,12 +1,12 @@
 #! /usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from pageMenu import PageMenu
-from pageCombat import PageCombat
-from pageEquipe import PageEquipe
+from pages.pageMenu import PageMenu
+from pages.pageCombat import PageCombat
+from pages.pageEquipe import PageEquipe
 from utils import *
 
-from pokemon import Pokemon
+from models.pokemon import Pokemon
 
 pygame.init()
 clock = pygame.time.Clock()
@@ -52,6 +52,6 @@ class Game:
 
 
 if __name__ == '__main__':
-    Pokemon.initClass()
+    Pokemon.init_class()
     game = Game('Poké-KAIRA')
     game.infinite_loop()
