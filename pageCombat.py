@@ -12,6 +12,7 @@ class PageCombat:
         self.combat_rect = screen.get_rect()
         self.combat_rect[3] = int(2 * self.bg_rect[3] / 3)
         self.bg = pygame.Surface(self.bg_rect.size)
+        self.last_page = None
 
         self.fond_combat = scale(loadImg('bg/combat1.png'), 2.51)
         self.bot_combat = pygame.transform.scale(loadImg('bg/bot_combat.jpg'), (self.bg_rect[2], self.bg_rect[3]-self.combat_rect[3]))
@@ -81,7 +82,8 @@ class PageCombat:
         actionJoueur2 = self.getRandomAction()
 
     def equipe(self):
-        print("equipe")
+        e = pygame.event.Event(CHANGEPAGE, {'page': 'Equi', 'source': 'Comb'})
+        pygame.event.post(e)
 
     def getRandomAction(self):
         return ACTIONS[randint(0, 2)]

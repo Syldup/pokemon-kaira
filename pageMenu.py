@@ -6,6 +6,7 @@ class PageMenu:
 
     def __init__(self, screen):
         self.bg = pygame.Surface(screen.get_size())
+        self.last_page = None
         self.loop = True
 
         self.bg_menu = scale(loadImg('bg/menu2.jpg'), 0.7)
@@ -54,7 +55,9 @@ class PageMenu:
         screen.blit(self.bg, (0, 0))
 
     def equipe(self):
-        print("equipe")
+        e = pygame.event.Event(CHANGEPAGE, {'page': 'Equi', 'source': 'Menu'})
+        pygame.event.post(e)
 
     def start(self):
-        print("start")
+        e = pygame.event.Event(CHANGEPAGE, {'page': 'Comb', 'source': 'Menu'})
+        pygame.event.post(e)

@@ -14,11 +14,11 @@ clock = pygame.time.Clock()
 
 class Game:
     def __init__(self, name):
+        pygame.display.set_icon(loadImg('icon/icon.png', convert=False))
         self.screen = pygame.display.set_mode((640, 480))
         pygame.display.set_caption(name)
 
         self.loop = True
-        self.page = None
         self.allPages = {
             'Menu': PageMenu(self.screen),
             'Comb': PageCombat(self.screen),
@@ -29,12 +29,15 @@ class Game:
     def infinite_loop(self):
         while self.loop:
             if self.page is None:
-                self.page = self.allPages['Comb']
+                self.page = self.allPages['Menu']
             self.page.draw()
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     gamequit()
+                elif event.type == CHANGEPAGE:
+                    self.page = self.allPages[event.page]
+                    self.page.last_page = event.source
                 else:
                     self.page.event(event)
 
