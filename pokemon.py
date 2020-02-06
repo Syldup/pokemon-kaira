@@ -1,7 +1,9 @@
 import json
 
-class Pokemon():
+
+class Pokemon:
     listPokemon = []
+
     def __init__(self, p):
         self.id = p["id"]
         self.name = p["name"]
@@ -15,9 +17,6 @@ class Pokemon():
         self.specialDefense = p["stats"][1]["base_stat"]
         self.speed = p["stats"][0]["base_stat"]
 
-    def add_trick(self, trick):
-        self.tricks.append(trick)
-
     @classmethod
     def initClass(cls):
         with open('assets/pok_data.json') as json_file:
@@ -27,6 +26,3 @@ class Pokemon():
 
     def __str__(self):
         return self.name
-
-
-
