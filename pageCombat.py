@@ -4,9 +4,9 @@ from utils import *
 class PageCombat:
     def __init__(self, screen):
         w, h = screen.get_size()
-        self.y_tier = int(h/3)
-        self.bg_combat = pygame.Surface((w, self.y_tier*2))
-        self.bg_menu = pygame.Surface((w, h-self.y_tier*2))
+        self.y_tier = int(h / 3)
+        self.bg_combat = pygame.Surface((w, self.y_tier * 2))
+        self.bg_menu = pygame.Surface((w, h - self.y_tier * 2))
         self.loop = True
         self.level = 1
 
@@ -18,18 +18,19 @@ class PageCombat:
         self.btn_conf = {
             'bg': self.bg_menu,
             'overflew': True,
-            'font': pygame.font.Font('assets/Pixeled.ttf', 18),
-            'text_offset': None,
+            'font': pygame.font.Font('assets/Pixeled.ttf', 16),
+            'text_offset': [0, 0],
             'sprite': {
                 True: loadImg('icon/select_on.png'),
                 False: loadImg('icon/select_off.png'),
             },
         }
-        w, h = self.bg_menu.get_size()
-        self.btns = [
-            (Button(self.btn_conf, 'ATTAQUE', (w-20, h/2-10), origine=9), self.attaque),
-            (Button(self.btn_conf, 'POKEMON', (w-20, h/2+10), origine=3), self.equpe),
+        self.w, self.h = self.bg_menu.get_size()
+        self.btnsMenu = [
+            (Button(self.btn_conf, 'ATTAQUE', (self.w - 20, self.h / 2 - 10), origine=9), self.attaque),
+            (Button(self.btn_conf, 'POKEMON', (self.w - 20, self.h / 2 + 10), origine=3), self.equipe),
         ]
+        self.btns = self.btnsMenu
 
     def draw(self):
         centerx = self.bg_combat.get_rect().centerx
@@ -49,15 +50,30 @@ class PageCombat:
             for btn, action in self.btns:
                 btn.update(action)
 
+    def drawAttacks(self, nameAttacks):
+        if len(nameAttacks) == 4:
+            self.btns = [
+                (Button(self.btn_conf, nameAttacks[0], (40, self.h / 2 - 10), origine=7), self.attaque),
+                (Button(self.btn_conf, nameAttacks[1], (40, self.h / 2 + 10), origine=1), self.equipe),
+                (Button(self.btn_conf, nameAttacks[2], (self.w - 40, self.h / 2 - 10), origine=6), self.attaque),
+                (Button(self.btn_conf, nameAttacks[3], (self.w - 40, self.h / 2 + 10), origine=6), self.equipe),
+                (Button(self.btn_conf, 'Retour', ((self.w / 2), self.h / 2 + 10), origine=5), self.goMainMenu)
+            ]
+
     def update(self):
         pass
 
     def display(self, screen):
         screen.blit(self.bg_combat, (0, 0))
-        screen.blit(self.bg_menu, (0, self.y_tier*2))
+        screen.blit(self.bg_menu, (0, self.y_tier * 2))
 
     def attaque(self):
-        print("attaque")
+        self.drawAttacks([
+            'force cachée', 'météore', 'pied de givre', 'sonicboom'
+        ])
 
-    def equpe(self):
+    def equipe(self):
         print("equpe")
+
+    def goMainMenu(self):
+        self.btns = self.btnsMenu
