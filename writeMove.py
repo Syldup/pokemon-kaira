@@ -16,7 +16,7 @@ def  read_write(url, path):
     return rdata
 
 
-fields = ["names","accuracy", "damage_class", "power", "pp"]
+fields = ["id","names","accuracy", "damage_class", "power", "pp", "priority"]
 
 list_mov = read_write('https://pokeapi.co/api/v2/move?offset=0&limit=746', 'list_mov.json')
 data = dict()
@@ -26,5 +26,5 @@ for mov in list_mov['results']:
     print(mov)
     data[mov['name']] = dict(((key, m[key]) for key in fields))
 
-with open("mov_data.json", 'w') as outfile:
+with open("assets/mov_data.json", 'w') as outfile:
     json.dump(data, outfile)
