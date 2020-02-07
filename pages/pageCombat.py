@@ -25,7 +25,7 @@ class PageCombat:
             'bg': self.bg,
             'overflew': True,
             'font': pygame.font.Font('assets/Pixeled.ttf', 16),
-            'text_offset': [0, 0],
+            'text_offset': (40, -7),
             'sprite': {
                 True: loadImg('icon/select_on.png'),
             },
@@ -33,10 +33,10 @@ class PageCombat:
         }
 
         self.btnsMenu = [
-            Button(self.btn_conf, 'ATTAQUE', (60, self.bg_rect[3] - 105), origine=4, action=(self.exec, ACTIONS[0])),
-            Button(self.btn_conf, 'DEFENSE', (60, self.bg_rect[3] - 60), origine=4, action=(self.exec, ACTIONS[1])),
-            Button(self.btn_conf, 'SOIN', (60, self.bg_rect[3] - 15), origine=4, action=(self.exec, ACTIONS[2])),
-            Button(self.btn_conf, 'POKEMON', (self.bg_rect[2] - 60, self.bg_rect[3] - 50), origine=6, action=(self.equipe,)),
+            Button(self.btn_conf, 'ATTAQUE', (50, self.combat_rect[3] + 45), origine=4, action=(self.exec, ACTIONS[0])),
+            Button(self.btn_conf, 'DEFENSE', (50, self.combat_rect[3] + 90), origine=4, action=(self.exec, ACTIONS[1])),
+            Button(self.btn_conf, 'SOIN', (50, self.combat_rect[3] + 135), origine=4, action=(self.exec, ACTIONS[2])),
+            Button(self.btn_conf, 'POKEMON', (520, self.combat_rect[3] + 120), origine=6, action=(self.equipe,)),
         ]
 
         self.joueur1 = Joueur('Pierre')
@@ -53,8 +53,8 @@ class PageCombat:
         main_poke_j1 = self.joueur1.main_poke()
         main_poke_j2 = self.joueur2.main_poke()
 
-        main_poke_j1.draw_combat(self.bg, (430, 215))
-        main_poke_j2.draw_combat(self.bg, (20, 45))
+        main_poke_j1.draw_combat(self.bg, (430, 220))
+        main_poke_j2.draw_combat(self.bg, (20, 50))
 
         main_poke_j1.draw_pokemon(self.bg, (140, 350), 1)
         main_poke_j2.draw_pokemon(self.bg, (480, 185), 2)

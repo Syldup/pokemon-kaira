@@ -164,7 +164,7 @@ class TeamPoke:
         drawOn(bg, self.nameB, pos, origine=1)
 
     def draw_pv(self, bg, pos):
-        pv = "{:n} / {:n}".format(self.hp, self.hpMax)
+        pv = "{} / {}".format(int(self.hp), int(self.hpMax))
         drawOn(bg, self.font12.render(pv, True, WHITE), sumList(pos, (1, 1)), origine=1)
         drawOn(bg, self.font12.render(pv, True, BLACK), pos, origine=1)
 
@@ -173,8 +173,8 @@ class TeamPoke:
 
     def draw_combat(self, bg, pos):
         self.draw_name(bg, pos)
-        self.draw_bar_pv(bg, sumList(pos, (0, 70)))
-        self.draw_pv(bg, sumList(pos, (100, 50)))
+        self.draw_bar_pv(bg, sumList(pos, (-5, 72)))
+        self.draw_pv(bg, sumList(pos, (120, 50)))
 
     def draw_btn(self, bg, pos):
         self.draw_name(bg, pos)
