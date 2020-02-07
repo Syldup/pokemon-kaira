@@ -65,12 +65,14 @@ class TeamPoke:
                 defenseur.hp -= damage
                 if defenseur.hp - damage <= 0:
                     statutDefenseur = "pokemon KO"
+                    defenseur.hp = 0
                     damageReponse = 0
                 self.hp -= damageReponse
             else:
                 self.hp -= damageReponse
                 if self.hp - damageReponse <= 0:
                     statut = "pokemon KO"
+                    self.hp = 0
                     damage = 0
                 defenseur.hp -= damage
         if reponse == "defense":
@@ -79,9 +81,11 @@ class TeamPoke:
                 defenseur.hp -= damage
             if defenseur.hp <= 0:
                 statutDefenseur = "pokemon KO"
+                defenseur.hp = 0
             self.hp -= defenseur.defense_spe/4
             if self.hp <= 0:
                 statut = "Pokemon KO"
+                self.hp = 0
         if reponse == "soin":
             damage = self.attack / 4
             heal = defenseur.attack_spe
@@ -92,6 +96,7 @@ class TeamPoke:
             defenseur.hp -= damage
             if defenseur.hp <= 0:
                 statutDefenseur = "pokemon KO"
+                defenseur.hp = 0
 
     def actionDefense(self, defenseur: TeamPoke, reponse: str):
         pvMax = self.hpMax
@@ -102,10 +107,12 @@ class TeamPoke:
                 self.hp -= damageReponse
             if self.hp <= 0:
                 statut = "pokemon KO"
+                self.hp = 0
             else:
                 defenseur.hp -= self.defense_spe/4
                 if defenseur.hp <= 0:
                     statueDefenseur = "Pokemon KO"
+                    defenseur.hp = 0
         if reponse == "defense":
             text = "ça fait rien lol, combat de magicarpe"
         if reponse == "soin":
@@ -128,6 +135,7 @@ class TeamPoke:
             self.hp -= damageReponse
             if self.hp <= 0:
                 statut = "pokemon KO"
+                self.hp = 0
         if reponse == "defense":
             if self.hp + heal > pvMax:
                 self.hp = pvMax
