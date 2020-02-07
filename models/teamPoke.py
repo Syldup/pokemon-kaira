@@ -14,7 +14,7 @@ class TeamPoke:
 
     def __init__(self, id_pok: int):
         self.poke = Pokemon.listPokemon[id_pok]
-        self.shiny = ''
+        self.shiny = '' if randint(0, 99) != 42 else '_shiny'
         self.sprites = [
             scale(loadImg('sprite/pokemon/{:0>3}.png'.format(id_pok+1)), 0.45),
             GIFImage('assets/sprite/pokestadium/dos{}/{:0>3}.gif'.format(self.shiny, id_pok+1), scale=1.5),
@@ -56,117 +56,33 @@ class TeamPoke:
     #         damage *= 1.5
     #     defenseur.hp -= damage
 
-    def action(self, action: str, defenseur: TeamPoke, reponse: str):
-        if action == 'attaque':
-            self.actionAttaque(defenseur, reponse)
-        elif action == 'defense':
-            self.actionDefense(defenseur, reponse)
+    def loseHP(self, hp):
+        if self.hp <= hp/4:
+            self.hp = 0
+            return True
+        self.hp -= hp/4
+        return False
+
+    def attaque(self, pok: TeamPoke, defense: bool):
+        if defense:
+            if pok.loseHP(self.attack - pok.defense):
+                return
+            if self.loseHP(pok.defense_spe):
+                return
         else:
-            self.actionSoin(defenseur, reponse)
+            if pok.loseHP(self.attack):
+                return
 
-    def actionAttaque(self, defenseur: TeamPoke, reponse: str):
-        pvMax = self.hpMax
-        pvMaxDefense = defenseur.hpMax
-        if reponse == "attaque":
-            damage = self.attack/4
-            damageReponse = defenseur.attack/4
-            if self.speed > defenseur.speed:
-                defenseur.hp -= damage
-                if defenseur.hp - damage <= 0:
-                    statutDefenseur = "pokemon KO"
-                    defenseur.hp = 0
-                    damageReponse = 0
-                self.hp -= damageReponse
-            else:
-                self.hp -= damageReponse
-                if self.hp - damageReponse <= 0:
-                    statut = "pokemon KO"
-                    self.hp = 0
-                    damage = 0
-                defenseur.hp -= damage
-        if reponse == "defense":
-            damage = self.attack/4 - defenseur.defense/4
-            if damage > 0:
-                defenseur.hp -= damage
-            if defenseur.hp <= 0:
-                statutDefenseur = "pokemon KO"
-                defenseur.hp = 0
-            self.hp -= defenseur.defense_spe/4
-            if self.hp <= 0:
-                statut = "Pokemon KO"
-                self.hp = 0
-        if reponse == "soin":
-            damage = self.attack / 4
-            heal = defenseur.attack_spe
-            if defenseur.hp + heal > pvMaxDefense:
-                defenseur.hp = pvMaxDefense
-            else:
-                defenseur.hp += heal
-            defenseur.hp -= damage
-            if defenseur.hp <= 0:
-                statutDefenseur = "pokemon KO"
-                defenseur.hp = 0
-
-    def actionDefense(self, defenseur: TeamPoke, reponse: str):
-        pvMax = self.hpMax
-        pvMaxDefense = defenseur.hpMax
-        if reponse == "attaque":
-            damageReponse = defenseur.attack/4 - self.defense/4
-            if damageReponse > 0:
-                self.hp -= damageReponse
-            if self.hp <= 0:
-                statut = "pokemon KO"
-                self.hp = 0
-            else:
-                defenseur.hp -= self.defense_spe/4
-                if defenseur.hp <= 0:
-                    statueDefenseur = "Pokemon KO"
-                    defenseur.hp = 0
-        if reponse == "defense":
-            text = "ça fait rien lol, combat de magicarpe"
-        if reponse == "soin":
-            heal = defenseur.attack_spe
-            if defenseur.hp + heal > pvMaxDefense:
-                defenseur.hp = pvMaxDefense
-            else:
-                defenseur.hp += heal
-
-    def actionSoin(self, defenseur: TeamPoke, reponse: str):
-        pvMax = self.hpMax
-        heal = self.attack_spe
-        pvMaxDefense = defenseur.hpMax
-        if reponse == "attaque":
-            if self.hp + heal > pvMax:
-                self.hp = pvMax
-            else:
-                self.hp += heal
-            damageReponse = defenseur.attack/4
-            self.hp -= damageReponse
-            if self.hp <= 0:
-                statut = "pokemon KO"
-                self.hp = 0
-        if reponse == "defense":
-            if self.hp + heal > pvMax:
-                self.hp = pvMax
-            else:
-                self.hp += heal
-        if reponse == "soin":
-            healDefenseur = defenseur.attack_spe
-            if defenseur.hp + healDefenseur > pvMaxDefense:
-                defenseur.hp = pvMaxDefense
-            else:
-                defenseur.hp += healDefenseur
-            if self.hp + heal > pvMax:
-                self.hp = pvMax
-            else:
-                self.hp += heal
+    def soin(self):
+        self.hp += self.attack_spe/4
+        if self.hpMax < self.hp:
+            self.hp = self.hpMax
 
     @classmethod
     def get_rmd_team(cls) -> List[TeamPoke]:
         last_pokemon = len(Pokemon.listPokemon) - 1
         if last_pokemon > 720:
             last_pokemon = 720
-            print(last_pokemon)
         return [TeamPoke(randint(0, last_pokemon)) for _ in range(6)]
 
     def draw_bar_pv(self, bg, pos):
