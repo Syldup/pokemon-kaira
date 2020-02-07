@@ -9,6 +9,7 @@ from pages.pageEquipe import PageEquipe
 from utils import *
 
 from models.pokemon import Pokemon
+from models.joueur import Joueur
 
 clock = pygame.time.Clock()
 
@@ -19,11 +20,13 @@ class Game:
         self.screen = pygame.display.set_mode((640, 480))
         pygame.display.set_caption(name)
 
+        self.joueur1 = Joueur('Pierre')
+
         self.loop = True
         self.allPages = {
             'Menu': PageMenu(self.screen),
-            'Comb': PageCombat(self.screen),
-            'Equi': PageEquipe(self.screen),
+            'Comb': PageCombat(self.screen, self.joueur1),
+            'Equi': PageEquipe(self.screen, self.joueur1),
         }
         self.page = None
 

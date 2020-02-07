@@ -8,7 +8,7 @@ ACTIONS = ['attaque', 'defense', 'soin']
 
 class PageCombat:
 
-    def __init__(self, screen):
+    def __init__(self, screen, joueur):
         self.bg_rect = screen.get_rect()
         self.combat_rect = screen.get_rect()
         self.combat_rect[3] = int(2 * self.bg_rect[3] / 3)
@@ -39,10 +39,10 @@ class PageCombat:
             Button(self.btn_conf, 'POKEMON', (520, self.combat_rect[3] + 120), origine=6, action=(self.equipe,)),
         ]
 
-        self.joueur1 = Joueur('Pierre')
-        self.joueur2 = Joueur('Blond')
-        self.pokemonFight1: TeamPoke = self.joueur1.pokemons[0]
-        self.pokemonFight2: TeamPoke = self.joueur2.pokemons[0]
+        self.j1 = joueur
+        self.j2 = Joueur('Blond')
+        self.pokemonFight1: TeamPoke = self.j1.main_poke()
+        self.pokemonFight2: TeamPoke = self.j2.main_poke()
 
     def draw(self):
         drawOn(self.bg, self.fond_combat, (self.combat_rect.centerx, self.combat_rect[3]), origine=8)
@@ -50,8 +50,8 @@ class PageCombat:
         drawOn(self.bg, self.box_right, (self.combat_rect[2], 220), origine=3)
         drawOn(self.bg, self.box_left, (0, 50), origine=1)
 
-        main_poke_j1 = self.joueur1.main_poke()
-        main_poke_j2 = self.joueur2.main_poke()
+        main_poke_j1 = self.j1.main_poke()
+        main_poke_j2 = self.j2.main_poke()
 
         main_poke_j1.draw_combat(self.bg, (430, 220))
         main_poke_j2.draw_combat(self.bg, (20, 50))
@@ -80,15 +80,7 @@ class PageCombat:
     def exec(self, action_j1: str):
         action_j2 = self.getRandomAction()
         print(action_j1, action_j2)
-        print(self.pokemonFight1.hp, self.pokemonFight2.hp)
-        if action_j1 == ACTIONS[0]:
-            self.pokemonFight1.actionAttaque(self.pokemonFight2, action_j2)
-        elif action_j1 == ACTIONS[1]:
-            self.pokemonFight1.actionDefense(self.pokemonFight2, action_j2)
-        else:
-            self.pokemonFight1.actionSoin(self.pokemonFight2, action_j2)
-        print(self.pokemonFight1.hp, self.pokemonFight2.hp)
-        print("------------------------")
+        self.j1.main_poke().action(action_j1, self.j2.main_poke(), action_j2)
 
     def equipe(self):
         e = pygame.event.Event(CHANGEPAGE, {'page': 'Equi', 'source': 'Comb'})

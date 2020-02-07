@@ -3,10 +3,11 @@ from utils import *
 
 class PageEquipe:
 
-    def __init__(self, screen):
+    def __init__(self, screen, joueur):
         self.bg_rect = screen.get_rect()
         self.last_page = None
         self.bg = pygame.Surface(self.bg_rect.size)
+        self.joueur = joueur
 
         self.fond_combat = scale(loadImg('bg/menu_team.png'), 3)
 
@@ -28,17 +29,21 @@ class PageEquipe:
         }
         self.btns = [
             Button(self.btn_conf2, '', (10, 150), origine=4, action=(self.retour, )),
-            Button(self.btn_conf, '', (self.bg_rect.centerx-70, 80), origine=4, action=(self.equpe, )),
-            Button(self.btn_conf, '', (self.bg_rect.centerx-70, 160), origine=4, action=(self.equpe, )),
-            Button(self.btn_conf, '', (self.bg_rect.centerx-70, 240), origine=4, action=(self.equpe, )),
-            Button(self.btn_conf, '', (self.bg_rect.centerx-70, 320), origine=4, action=(self.equpe, )),
-            Button(self.btn_conf, '', (self.bg_rect.centerx-70, 400), origine=4, action=(self.equpe, )),
+            Button(self.btn_conf, '', (self.bg_rect.centerx-70, 80), origine=4, action=(self.joueur.switch, 1)),
+            Button(self.btn_conf, '', (self.bg_rect.centerx-70, 160), origine=4, action=(self.joueur.switch, 2)),
+            Button(self.btn_conf, '', (self.bg_rect.centerx-70, 240), origine=4, action=(self.joueur.switch, 3)),
+            Button(self.btn_conf, '', (self.bg_rect.centerx-70, 320), origine=4, action=(self.joueur.switch, 4)),
+            Button(self.btn_conf, '', (self.bg_rect.centerx-70, 400), origine=4, action=(self.joueur.switch, 5)),
         ]
 
     def draw(self):
         drawOn(self.bg, self.fond_combat, (self.bg_rect.centerx, self.bg_rect.centery), origine=5)
-        for btn in self.btns:
+        for btn, p in zip(self.btns, self.joueur.pokemons):
             btn.draw()
+            if btn.pos[0] == 10:
+                p.draw_btn2(self.bg, btn.pos)
+            else:
+                p.draw_btn(self.bg, btn.pos)
 
     def event(self, e):
         if e.type == pygame.MOUSEBUTTONDOWN:
@@ -54,7 +59,3 @@ class PageEquipe:
     def retour(self):
         e = pygame.event.Event(CHANGEPAGE, {'page': self.last_page if self.last_page else 'Menu', 'source': 'Equi'})
         pygame.event.post(e)
-
-    def equpe(self):
-        print("equpe")
-

@@ -84,7 +84,7 @@ class Button:
         else:
             self.pos_text = self.pos.move(conf['text_offset'])
 
-    def draw(self, update=False):
+    def draw(self):
         if self.overflew:
             self.state = self.pos.collidepoint(pygame.mouse.get_pos())
         if self.state in self.sprite:
@@ -92,8 +92,7 @@ class Button:
         drawOn(self.bg, self.sprite['text'], self.pos_text)
 
     def update(self):
-        self.draw(True)
+        self.state = self.pos.collidepoint(pygame.mouse.get_pos())
         if self.state:
             if self.action:
                 self.action[0](*self.action[1:])
-            self.draw(True)

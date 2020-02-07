@@ -16,9 +16,10 @@ class TeamPoke:
         self.poke = Pokemon.listPokemon[id_pok]
         self.shiny = ''
         self.sprites = [
-            loadImg('sprite/pokemon/{:0>3}.png'.format(id_pok+1)),
+            scale(loadImg('sprite/pokemon/{:0>3}.png'.format(id_pok+1)), 0.45),
             GIFImage('assets/sprite/pokestadium/dos{}/{:0>3}.gif'.format(self.shiny, id_pok+1), scale=1.5),
             GIFImage('assets/sprite/pokestadium/fas{}/{:0>3}.gif'.format(self.shiny, id_pok+1), scale=1.5),
+            GIFImage('assets/sprite/pokestadium/fas{}/{:0>3}.gif'.format(self.shiny, id_pok+1)),
         ]
         self.nameB = self.font16.render(self.poke.name, True, BLACK)
         self.nameW = self.font16.render(self.poke.name, True, WHITE)
@@ -54,6 +55,14 @@ class TeamPoke:
     #     if random() < 0.2:
     #         damage *= 1.5
     #     defenseur.hp -= damage
+
+    def action(self, action: str, defenseur: TeamPoke, reponse: str):
+        if action == 'attaque':
+            self.actionAttaque(defenseur, reponse)
+        elif action == 'defense':
+            self.actionDefense(defenseur, reponse)
+        else:
+            self.actionSoin(defenseur, reponse)
 
     def actionAttaque(self, defenseur: TeamPoke, reponse: str):
         pvMax = self.hpMax
@@ -167,9 +176,9 @@ class TeamPoke:
             drawOn(bg, self.joint_corp, pos,  origine=4, area=rect)
             drawOn(bg, self.joint_tete, (pos[0]+rect[2] - 2, pos[1]), origine=4)
 
-    def draw_name(self, bg, pos):
-        drawOn(bg, self.nameW, sumList(pos, (1, 1)), origine=1)
-        drawOn(bg, self.nameB, pos, origine=1)
+    def draw_name(self, bg, pos, origine=1):
+        drawOn(bg, self.nameW, sumList(pos, (1, 1)), origine=origine)
+        drawOn(bg, self.nameB, pos, origine=origine)
 
     def draw_pv(self, bg, pos):
         pv = "{} / {}".format(int(self.hp), int(self.hpMax))
@@ -185,14 +194,16 @@ class TeamPoke:
         self.draw_pv(bg, sumList(pos, (120, 50)))
 
     def draw_btn(self, bg, pos):
-        self.draw_name(bg, pos)
-        self.draw_bar_pv(bg, sumList(pos, (20, 20)))
-        self.draw_pv(bg, sumList(pos, (40, 50)))
+        self.draw_name(bg, sumList(pos, (245, 5)), 3)
+        self.draw_bar_pv(bg, sumList(pos, (260, 23)))
+        self.draw_pv(bg, sumList(pos, (290, 25)))
+        drawOn(bg, self.sprites[0], sumList(pos, (40, 50)), origine=5)
 
     def draw_btn2(self, bg, pos):
-        self.draw_name(bg, pos)
-        self.draw_bar_pv(bg, sumList(pos, (20, 20)))
-        self.draw_pv(bg, sumList(pos, (40, 50)))
+        self.draw_name(bg, sumList(pos, (220, 25)), 3)
+        self.draw_bar_pv(bg, sumList(pos, (100, 100)))
+        self.draw_pv(bg, sumList(pos, (130, 110)))
+        drawOn(bg, self.sprites[3], sumList(pos, (65, 110)), origine=5)
 
 
 if __name__ == "__main__":

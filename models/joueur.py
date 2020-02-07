@@ -10,3 +10,10 @@ class Joueur:
 
     def main_poke(self) -> TeamPoke:
         return self.pokemons[0]
+
+    def switch(self, idx):
+        if 0 < idx < len(self.pokemons):
+            self.pokemons[0], self.pokemons[idx] = self.pokemons[idx], self.pokemons[0]
+
+    def lose(self) -> bool:
+        return all(p.hp == 0 for p in self.pokemons)
