@@ -34,7 +34,8 @@ class PageCombat:
             Button(self.btn_conf, 'ATTAQUE', (50, self.combat_rect[3] + 45), origine=4, action=(self.exec, 'attaque')),
             Button(self.btn_conf, 'DEFENSE', (50, self.combat_rect[3] + 90), origine=4, action=(self.exec, 'defense')),
             Button(self.btn_conf, 'SOIN', (50, self.combat_rect[3] + 135), origine=4, action=(self.exec, 'soin')),
-            Button(self.btn_conf, 'POKEMON', (520, self.combat_rect[3] + 120), origine=6, action=(self.change_page, 'Equi')),
+            Button(self.btn_conf, 'POKEMON', (520, self.combat_rect[3] + 63), origine=6, action=(self.change_page, 'Equi')),
+            Button(self.btn_conf, 'EXIT', (520, self.combat_rect[3] + 108), origine=6, action=(self.exit, )),
         ]
 
         self.j1 = joueur
@@ -105,12 +106,12 @@ class PageCombat:
 
         if self.j1.lose():
             print('Tous vos pokemon sont KO, vous avez PERDU !')
-            self.reset()
+            self.exit()
         if self.j2.lose():
             print('Bravo, tous les pokemon adverse sont KO, vous avez GAGNER !')
-            self.reset()
+            self.exit()
 
-    def reset(self):
+    def exit(self):
         self.j1.reset()
         self.j2.pokemons = TeamPoke.get_rmd_team()
         self.change_page('Menu')
