@@ -25,11 +25,11 @@ class PageMenu:
         }
         xpos, h = self.bg.get_rect().centerx-90, self.bg.get_rect().centery*2
         self.btns = [
-            (Button(self.btn_conf, 'Pokemons', (xpos - 10, h-180), origine=9), None),
-            (Button(self.btn_conf, 'Equipe', (xpos + 10, h-180), origine=7), self.equipe),
-            (Button(self.btn_conf, 'Start', (xpos - 10, h-100), origine=9), self.start),
-            (Button(self.btn_conf, '...', (xpos + 10, h-100), origine=7), self.start),
-            (Button(self.btn_conf, 'Quit', (xpos, h-20), origine=8), gamequit),
+            Button(self.btn_conf, 'Pokemons', (xpos - 10, h-180), origine=9),
+            Button(self.btn_conf, 'Equipe', (xpos + 10, h-180), origine=7, action=(self.change_page, 'Equi')),
+            Button(self.btn_conf, 'Start', (xpos - 10, h-100), origine=9, action=(self.change_page, 'Comb')),
+            Button(self.btn_conf, '...', (xpos + 10, h-100), origine=7, action=(self.change_page, 'Comb')),
+            Button(self.btn_conf, 'Quit', (xpos, h-20), origine=8, action=(gamequit, )),
         ]
 
     def draw(self):
@@ -40,13 +40,13 @@ class PageMenu:
         drawOn(self.bg, self.logo_pokemon, (centerx, 90), origine=5)
         drawOn(self.bg, self.logo_kaira, (centerx+30, 20))
 
-        for btn, action in self.btns:
+        for btn in self.btns:
             btn.draw()
 
     def event(self, e):
         if e.type == pygame.MOUSEBUTTONDOWN:
-            for btn, action in self.btns:
-                btn.update(action)
+            for btn in self.btns:
+                btn.update()
 
     def update(self):
         pass
@@ -54,10 +54,6 @@ class PageMenu:
     def display(self, screen):
         screen.blit(self.bg, (0, 0))
 
-    def equipe(self):
-        e = pygame.event.Event(CHANGEPAGE, {'page': 'Equi', 'source': 'Menu'})
-        pygame.event.post(e)
-
-    def start(self):
-        e = pygame.event.Event(CHANGEPAGE, {'page': 'Comb', 'source': 'Menu'})
+    def change_page(self, page):
+        e = pygame.event.Event(CHANGEPAGE, {'page': page, 'source': 'Menu'})
         pygame.event.post(e)

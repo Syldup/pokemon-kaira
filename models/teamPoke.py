@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from typing import List
 from models.pokemon import Pokemon
+from models.GIFImage import GIFImage
 from random import randint
 from utils import *
 
@@ -12,6 +13,12 @@ class TeamPoke:
 
     def __init__(self, id_pok: int):
         self.poke = Pokemon.listPokemon[id_pok]
+        self.shiny = ''
+        self.sprites = [
+            loadImg('sprite/pokemon/{:0>3}.png'.format(id_pok+1)),
+            GIFImage('assets/sprite/pokestadium/dos{}/{:0>3}.gif'.format(self.shiny, id_pok+1), scale=1.5),
+            GIFImage('assets/sprite/pokestadium/fas{}/{:0>3}.gif'.format(self.shiny, id_pok+1), scale=1.5),
+        ]
         # self.move = Move.listMove[id]
         self.niveau = 50
         self.hp = 0
@@ -64,6 +71,9 @@ class TeamPoke:
     @classmethod
     def get_rmd_team(cls) -> List[TeamPoke]:
         last_pokemon = len(Pokemon.listPokemon) - 1
+        if last_pokemon > 720:
+            last_pokemon = 720
+            print(last_pokemon)
         return [TeamPoke(randint(0, last_pokemon)) for _ in range(6)]
 
     def draw_bar_pv(self, bg, pos):
@@ -71,10 +81,18 @@ class TeamPoke:
             rect = self.joint_corp.get_rect()
             rect[2] = rect[2] * self.hp / self.hpMax
             drawOn(bg, self.joint_corp, pos,  origine=4, area=rect)
-            pos[0] += rect[2] - 2
-            drawOn(bg, self.joint_tete, pos, origine=4)
+            drawOn(bg, self.joint_tete, (pos[0]+rect[2] - 2, pos[1]), origine=4)
+
+    def draw_pokemon(self, bg, pos, fas: int):
+        drawOn(bg, self.sprites[fas], pos, origine=8)
 
     def draw_combat(self, bg, pos):
+        self.draw_bar_pv(bg, pos)
+
+    def draw_btn(self, bg, pos):
+        self.draw_bar_pv(bg, pos)
+
+    def draw_btn2(self, bg, pos):
         self.draw_bar_pv(bg, pos)
 
 

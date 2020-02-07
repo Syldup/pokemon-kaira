@@ -10,3 +10,6 @@ class Joueur:
 
     def addPokemon(self, pokemon: TeamPoke):
         self.pokemons.append(pokemon)
+
+    def main_poke(self) -> TeamPoke:
+        return self.pokemons[0]

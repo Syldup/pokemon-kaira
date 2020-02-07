@@ -35,6 +35,8 @@ class Game:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     gamequit()
+                elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 3:
+                    print(event.pos)
                 elif event.type == CHANGEPAGE:
                     self.page = self.allPages[event.page]
                     self.page.last_page = event.source
