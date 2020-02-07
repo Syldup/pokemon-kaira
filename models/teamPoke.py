@@ -74,7 +74,7 @@ class TeamPoke:
                 return
 
     def soin(self):
-        self.hp += self.attack_spe/4
+        self.hp += self.attack_spe/2
         if self.hpMax < self.hp:
             self.hp = self.hpMax
 
