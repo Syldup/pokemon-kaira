@@ -52,22 +52,87 @@ class TeamPoke:
     #         damage *= 1.5
     #     defenseur.hp -= damage
 
-    def action(self, defenseur: TeamPoke, action: str, reponse: str):
+    def actionAttaque(self, defenseur: TeamPoke, action: str, reponse: str):
+        pvMax = self.hp
+        pvMaxDefense = defenseur.hp
         if action == "attaque" and reponse == "attaque":
             damage = self.attack/4
             damageReponse = defenseur.attack/4
-            self.hp -= damageReponse
-            defenseur.hp -= damage
+            if self.speed > defenseur.speed:
+                defenseur.hp -= damage
+                if defenseur.hp - damage <= 0:
+                    statutDefenseur = "pokemon KO"
+                    damageReponse = 0
+            else:
+                self.hp -= damageReponse
+                if self.hp - damageReponse <= 0:
+                    statut = "pokemon KO"
+                    damage = 0
         if action == "attaque" and reponse == "defense":
             damage = self.attack/4 - defenseur.defense/4
             if damage > 0:
                 defenseur.hp -= damage
+            if defenseur.hp <= 0:
+                statutDefenseur = "pokemon KO"
         if action == "attaque" and reponse == "soin":
             damage = self.attack / 4
             heal = defenseur.attack_spe
-            defenseur.hp += heal
+            if defenseur.hp + heal > pvMaxDefense:
+                defenseur.hp = pvMaxDefense
+            else:
+                defenseur.hp += heal
             defenseur.hp -= damage
+            if defenseur.hp <= 0:
+                statutDefenseur = "pokemon KO"
 
+    def actionDefense(self, defenseur: TeamPoke, action: str, reponse: str):
+        pvMax = self.hp
+        pvMaxDefense = defenseur.hp
+        if action == "defense" and reponse == "attaque":
+            damageReponse = defenseur.attack/4 - self.defense/4
+            if damageReponse > 0:
+                self.hp -= damageReponse
+            if self.hp <= 0:
+                statut = "pokemon KO"
+        if action == "defense" and reponse == "defense":
+            text = "ça fait rien lol"
+        if action == "defense" and reponse == "soin":
+            heal = defenseur.attack_spe
+            if defenseur.hp + heal > pvMaxDefense:
+                defenseur.hp = pvMaxDefense
+            else:
+                defenseur.hp += heal
+
+    def actionSoin(self, defenseur: TeamPoke, action: str, reponse: str):
+        pvMax = self.hp
+        pvMaxDefense = defenseur.hp
+        if action == "soin" and reponse == "attaque":
+            heal = self.attack_spe
+            if self.hp + heal > pvMax:
+                self.hp = pvMax
+            else:
+                self.hp += heal
+            damageReponse = defenseur.attack
+            self.hp -= damageReponse
+            if self.hp <= 0:
+                statut = "pokemon KO"
+        if action == "soin" and reponse == "defense":
+            heal = self.attack_spe
+            if self.hp + heal > pvMax:
+                self.hp = pvMax
+            else:
+                self.hp += heal
+        if action == "soin" and reponse == "soin":
+            healDefenseur = defenseur.attack_spe
+            if defenseur.hp + healDefenseur > pvMaxDefense:
+                defenseur.hp = pvMaxDefense
+            else:
+                defenseur.hp += healDefenseur
+            heal = self.attack_spe
+            if self.hp + heal > pvMax:
+                self.hp = pvMax
+            else:
+                self.hp += heal
     @classmethod
     def get_rmd_team(cls) -> List[TeamPoke]:
         last_pokemon = len(Pokemon.listPokemon) - 1
