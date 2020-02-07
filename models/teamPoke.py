@@ -2,12 +2,13 @@ from __future__ import annotations
 
 from typing import List
 from models.pokemon import Pokemon
-from models.GIFImage import GIFImage
 from random import randint
 from utils import *
 
 
 class TeamPoke:
+    font16 = pygame.font.Font('assets/Pixeled.ttf', 16)
+    font12 = pygame.font.Font('assets/Pixeled.ttf', 12)
     joint_corp = scale(loadImg('sprite/joint_corp.png', convert=False), 2)
     joint_tete = scale(loadImg('sprite/joint_tete.png', convert=False), 2)
 
@@ -19,6 +20,8 @@ class TeamPoke:
             GIFImage('assets/sprite/pokestadium/dos{}/{:0>3}.gif'.format(self.shiny, id_pok+1), scale=1.5),
             GIFImage('assets/sprite/pokestadium/fas{}/{:0>3}.gif'.format(self.shiny, id_pok+1), scale=1.5),
         ]
+        self.nameB = self.font16.render(self.poke.name, True, BLACK)
+        self.nameW = self.font16.render(self.poke.name, True, WHITE)
         # self.move = Move.listMove[id]
         self.niveau = 50
         self.hp = 0
@@ -156,17 +159,32 @@ class TeamPoke:
             drawOn(bg, self.joint_corp, pos,  origine=4, area=rect)
             drawOn(bg, self.joint_tete, (pos[0]+rect[2] - 2, pos[1]), origine=4)
 
+    def draw_name(self, bg, pos):
+        drawOn(bg, self.nameW, sumList(pos, (1, 1)), origine=1)
+        drawOn(bg, self.nameB, pos, origine=1)
+
+    def draw_pv(self, bg, pos):
+        pv = "{:n} / {:n}".format(self.hp, self.hpMax)
+        drawOn(bg, self.font12.render(pv, True, WHITE), sumList(pos, (1, 1)), origine=1)
+        drawOn(bg, self.font12.render(pv, True, BLACK), pos, origine=1)
+
     def draw_pokemon(self, bg, pos, fas: int):
         drawOn(bg, self.sprites[fas], pos, origine=8)
 
     def draw_combat(self, bg, pos):
-        self.draw_bar_pv(bg, pos)
+        self.draw_name(bg, pos)
+        self.draw_bar_pv(bg, sumList(pos, (0, 70)))
+        self.draw_pv(bg, sumList(pos, (100, 50)))
 
     def draw_btn(self, bg, pos):
-        self.draw_bar_pv(bg, pos)
+        self.draw_name(bg, pos)
+        self.draw_bar_pv(bg, sumList(pos, (20, 20)))
+        self.draw_pv(bg, sumList(pos, (40, 50)))
 
     def draw_btn2(self, bg, pos):
-        self.draw_bar_pv(bg, pos)
+        self.draw_name(bg, pos)
+        self.draw_bar_pv(bg, sumList(pos, (20, 20)))
+        self.draw_pv(bg, sumList(pos, (40, 50)))
 
 
 if __name__ == "__main__":

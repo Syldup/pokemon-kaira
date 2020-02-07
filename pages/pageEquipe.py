@@ -2,15 +2,13 @@ from utils import *
 
 
 class PageEquipe:
+
     def __init__(self, screen):
         self.bg_rect = screen.get_rect()
         self.last_page = None
         self.bg = pygame.Surface(self.bg_rect.size)
 
         self.fond_combat = scale(loadImg('bg/menu_team.png'), 3)
-
-        self.joint_corp = scale(loadImg('sprite/joint_corp.png'), 2)
-        self.joint_tete = scale(loadImg('sprite/joint_tete.png'), 2)
 
         self.btn_conf = {
             'bg': self.bg,
@@ -41,20 +39,11 @@ class PageEquipe:
         drawOn(self.bg, self.fond_combat, (self.bg_rect.centerx, self.bg_rect.centery), origine=5)
         for btn in self.btns:
             btn.draw()
-            self.draw_bar_pv(list(i+j for i, j in zip(btn.pos[:2], (70, 45))), 10, 10)
-
-    def draw_bar_pv(self, pos, l, p):
-        if p > 0:
-            rect = self.joint_corp.get_rect()
-            rect[2] = rect[2] * p / l
-            drawOn(self.bg, self.joint_corp, pos,  origine=4, area=rect)
-            drawOn(self.bg, self.joint_tete, (pos[0]+rect[2]-2, pos[1]), origine=4)
 
     def event(self, e):
         if e.type == pygame.MOUSEBUTTONDOWN:
             for btn in self.btns:
                 btn.update()
-                self.draw_bar_pv(list(i+j for i, j in zip(btn.pos[:2], (70, 45))), 10, 10)
 
     def update(self):
         pass

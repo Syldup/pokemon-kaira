@@ -25,10 +25,10 @@ class PageMenu:
         }
         xpos, h = self.bg.get_rect().centerx-90, self.bg.get_rect().centery*2
         self.btns = [
-            Button(self.btn_conf, 'Pokemons', (xpos - 10, h-180), origine=9),
-            Button(self.btn_conf, 'Equipe', (xpos + 10, h-180), origine=7, action=(self.change_page, 'Equi')),
-            Button(self.btn_conf, 'Start', (xpos - 10, h-100), origine=9, action=(self.change_page, 'Comb')),
-            Button(self.btn_conf, '...', (xpos + 10, h-100), origine=7, action=(self.change_page, 'Comb')),
+            # Button(self.btn_conf, 'Pokemons', (xpos - 10, h-180), origine=9),
+            Button(self.btn_conf, 'Equipe', (xpos, h-180), origine=8, action=(self.change_page, 'Equi')),
+            # Button(self.btn_conf, 'Start', (xpos - 10, h-100), origine=9, action=(self.change_page, 'Comb')),
+            Button(self.btn_conf, 'Start', (xpos, h-100), origine=8, action=(self.change_page, 'Comb')),
             Button(self.btn_conf, 'Quit', (xpos, h-20), origine=8, action=(gamequit, )),
         ]
 

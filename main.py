@@ -1,5 +1,7 @@
 #! /usr/bin/env python3
 # -*- coding: utf-8 -*-
+import pygame
+pygame.init()
 
 from pages.pageMenu import PageMenu
 from pages.pageCombat import PageCombat
@@ -8,7 +10,6 @@ from utils import *
 
 from models.pokemon import Pokemon
 
-pygame.init()
 clock = pygame.time.Clock()
 
 

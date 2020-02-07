@@ -5,6 +5,7 @@ from models.GIFImage import GIFImage
 
 BLACK = 0, 0, 0
 WHITE = 255, 255, 255
+GRIS = 128, 128, 128
 CIEL = 0, 200, 255
 RED = 255, 0, 0
 ORANGE = 255, 100, 0
@@ -28,6 +29,10 @@ def loadImg(path: str, convert: bool=True):
 
 def xAll(l, n):
     return list(int(i*n) for i in l)
+
+
+def sumList(*args):
+    return list(sum(a) for a in zip(*args))
 
 
 def scale(img, n):
