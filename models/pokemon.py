@@ -18,11 +18,15 @@ class Pokemon:
         self.speed = p["stats"][0]["base_stat"]
 
     @classmethod
-    def initClass(cls):
+    def init_class(cls):
+        cls.listPokemon = []
         with open('assets/pok_data.json') as json_file:
-            jsonPokemon = json.load(json_file)
-            for key, value in jsonPokemon.items():
+            json_pokemon = json.load(json_file)
+            for key, value in json_pokemon.items():
                 cls.listPokemon.append(Pokemon(value))
 
     def __str__(self):
         return self.name
+
+
+Pokemon.init_class()
