@@ -31,17 +31,16 @@ class PageCombat:
             },
             'box_size': 'text',
         }
-        self.btnsMenu = [
-            (Button(self.btn_conf, 'ATTAQUE', (60, self.bg_rect[3] - 105), origine=4),
-             self.launchAction(ACTIONS[0])),
-            (Button(self.btn_conf, 'DEFENSE', (60, self.bg_rect[3] - 60), origine=4),
-             self.launchAction(ACTIONS[1])),
-            (Button(self.btn_conf, 'SOIN', (60, self.bg_rect[3] - 15), origine=4),
-             self.launchAction(ACTIONS[2])),
+        self.btns = [
+            (Button(self.btn_conf, 'ATTAQUE', (60, self.bg_rect[3] - 125), origine=4),
+             self.launchAction, 0),
+            (Button(self.btn_conf, 'DEFENSE', (60, self.bg_rect[3] - 80), origine=4),
+             self.launchAction, 1),
+            (Button(self.btn_conf, 'SOIN', (60, self.bg_rect[3] - 35), origine=4),
+             self.launchAction, 2),
             (Button(self.btn_conf, 'POKEMON', (self.bg_rect[2] - 60, self.bg_rect[3] - 50), origine=6),
-             self.equipe),
+             self.equipe, 0),
         ]
-        self.btns = self.btnsMenu
 
         self.joueur1 = Joueur('pierre')
         self.joueur2 = Joueur('blond')
@@ -56,7 +55,7 @@ class PageCombat:
         self.draw_bar_pv((self.combat_rect[2]-200, 270), 10, 10)
 
         drawOn(self.bg, self.bot_combat, (self.combat_rect.centerx, self.combat_rect[3]), origine=2)
-        for btn, action in self.btns:
+        for btn, action, n in self.btns:
             btn.draw()
 
     def draw_bar_pv(self, pos, l, p):
@@ -68,8 +67,8 @@ class PageCombat:
 
     def event(self, e):
         if e.type == pygame.MOUSEBUTTONDOWN:
-            for btn, action in self.btns:
-                btn.update(action)
+            for btn, action, n in self.btns:
+                btn.update(action, ACTIONS[n])
 
     def update(self):
         pass
@@ -79,6 +78,9 @@ class PageCombat:
 
     def launchAction(self, actionJoueur1: str):
         actionJoueur2 = self.getRandomAction()
+        print(actionJoueur1)
+        print(actionJoueur2)
+        print("-------------")
 
     def equipe(self):
         print("equipe")
