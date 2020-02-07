@@ -1,4 +1,5 @@
 from models.joueur import Joueur
+from models.teamPoke import TeamPoke
 from utils import *
 from random import randint
 
@@ -39,8 +40,8 @@ class PageCombat:
 
         self.joueur1 = Joueur('Pierre')
         self.joueur2 = Joueur('Blond')
-        self.pokemonFight1 = None  # self.joueur1.pokemons[0]
-        self.pokemonFight2 = None  # self.joueur2.pokemons[0]
+        self.pokemonFight1: TeamPoke = self.joueur1.pokemons[0]
+        self.pokemonFight2: TeamPoke = self.joueur2.pokemons[0]
 
     def draw(self):
         drawOn(self.bg, self.fond_combat, (self.combat_rect.centerx, self.combat_rect[3]), origine=8)
@@ -77,6 +78,15 @@ class PageCombat:
     def exec(self, actionJoueur1: str):
         actionJoueur2 = self.getRandomAction()
         print(actionJoueur1, actionJoueur2)
+        print(self.pokemonFight1.hp, self.pokemonFight2.hp)
+        if actionJoueur1 == ACTIONS[0]:
+            self.pokemonFight1.actionAttaque(self.pokemonFight2, actionJoueur2)
+        elif actionJoueur1 == ACTIONS[1]:
+            self.pokemonFight1.actionDefense(self.pokemonFight2, actionJoueur2)
+        else:
+            self.pokemonFight1.actionSoin(self.pokemonFight2, actionJoueur2)
+        print(self.pokemonFight1.hp, self.pokemonFight2.hp)
+        print("------------------------")
 
     def equipe(self):
         e = pygame.event.Event(CHANGEPAGE, {'page': 'Equi', 'source': 'Comb'})
